@@ -1,5 +1,5 @@
 .bundle/
-iso/*
+iso/*.iso
 *.box
 virtualfloppy.vfd
 packer_cache
