@@ -149,7 +149,7 @@
         "../_common/virtualbox.sh",
         "../_common/vmware.sh",
         "../_common/parallels.sh",
-        "../centos/scripts/upgrade.sh",
+        "../centos/scripts/upgrade_rhel.sh",
         "../centos/scripts/cleanup.sh",
         "../_common/minimize.sh"
       ],
