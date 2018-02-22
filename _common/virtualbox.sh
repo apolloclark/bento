@@ -17,3 +17,5 @@ virtualbox-iso|virtualbox-ovf)
     rm -f $HOME_DIR/*.iso;
     ;;
 esac
+
+systemctl reboot
