@@ -128,7 +128,14 @@
     {
       "output": "../builds/{{.Provider}}/{{user `box_basename`}}.{{user `build_timestamp`}}.box",
       "type": "vagrant"
-    }
+    },
+	{
+	  "type": "vagrant-cloud",
+	  "box_tag": "{{user `atlas_box_tag`}}",
+	  "access_token": "{{user `atlas_token`}}",
+	  "no_release": "true",
+	  "version": "{{user `version`}}"
+	}
   ],
   "provisioners": [
     {
@@ -157,6 +164,7 @@
     }
   ],
   "variables": {
+  	"atlas_box_tag": "apolloclark/rhel7.4",
     "arch": "64",
     "box_basename": "rhel-7.4",
     "build_timestamp": "{{isotime \"20060102.150405\"}}",
