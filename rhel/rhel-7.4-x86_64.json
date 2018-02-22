@@ -4,7 +4,7 @@
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}}<enter><wait>"
       ],
-      "boot_wait": "10s",
+      "boot_wait": "30s",
       "disk_size": "{{user `disk_size`}}",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "RedHat_64",
@@ -15,6 +15,7 @@
       "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `mirror`}}/{{user `mirror_directory`}}/{{user `iso_name`}}",
       "output_directory": "../builds/packer-{{user `template`}}-virtualbox",
+      "post_shutdown_delay": "1m",
       "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -125,7 +126,7 @@
   ],
   "post-processors": [
     {
-      "output": "../builds/{{user `box_basename`}}.{{.Provider}}.box",
+      "output": "../builds/{{.Provider}}/{{user `box_basename`}}.{{user `build_timestamp`}}.box",
       "type": "vagrant"
     }
   ],
@@ -135,7 +136,9 @@
         "HOME_DIR=/home/vagrant",
         "http_proxy={{user `http_proxy`}}",
         "https_proxy={{user `https_proxy`}}",
-        "no_proxy={{user `no_proxy`}}"
+        "no_proxy={{user `no_proxy`}}",
+        "REDHAT_USER={{user `redhat_user`}}",
+        "REDHAT_PASS={{user `redhat_pass`}}"
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "expect_disconnect": true,
@@ -146,6 +149,7 @@
         "../_common/virtualbox.sh",
         "../_common/vmware.sh",
         "../_common/parallels.sh",
+        "../centos/scripts/upgrade.sh",
         "../centos/scripts/cleanup.sh",
         "../_common/minimize.sh"
       ],
@@ -155,11 +159,11 @@
   "variables": {
     "arch": "64",
     "box_basename": "rhel-7.4",
-    "build_timestamp": "{{isotime \"20060102150405\"}}",
+    "build_timestamp": "{{isotime \"20060102.150405\"}}",
     "cpus": "1",
     "disk_size": "65536",
     "git_revision": "__unknown_git_revision__",
-    "headless": "",
+    "headless": "true",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "iso_checksum": "431a58c8c0351803a608ffa56948c5a7861876f78ccbe784724dd8c987ff7000",
@@ -168,10 +172,12 @@
     "ks_path": "7/ks.cfg",
     "memory": "1024",
     "mirror": "http://YOU-MUST-PROVIDE-YOUR-OWN-ISO.sorry",
-    "mirror_directory": "rhel",
+    "mirror_directory": "vm_source",
     "name": "rhel-7.4",
     "no_proxy": "{{env `no_proxy`}}",
+    "redhat_user": "{{env `REDHAT_USER`}}",
+    "redhat_pass": "{{env `REDHAT_PASS`}}",
     "template": "rhel-7.4-x86_64",
-    "version": "TIMESTAMP"
+    "version": "{{isotime \"20060102.030405\"}}"
   }
 }
